@@ -1,4 +1,4 @@
-package xyz.sweetkebab.discordproject;
+package xyz.sweetkebab.discordproject.utils;
 
 public class Assert {
 

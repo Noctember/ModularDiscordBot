@@ -11,9 +11,37 @@ import xyz.sweetkebab.discordproject.user.PermissionsAccess;
  * @author SweetKebab_
  * Created the 2018-11-06 at 21:03.
  */
-@Command(command = "reload", permission = PermissionsAccess.BOT_ADMINISTRATOR, category = CommandCategory.BOTMANAGEMENT)
-public class ReloadCommand extends AbstractCommand{
+public class ReloadCommand extends AbstractCommand {
+    @Command(command = {"reload"}, permission = PermissionsAccess.BOT_ADMINISTRATOR, category = CommandCategory.BOTMANAGEMENT)
+    @Override
     public void execute(String[] args, MessageReceivedEvent e) {
-        System.out.println("oOoWoOwoOSd");
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
     }
 }

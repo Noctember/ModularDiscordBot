@@ -11,7 +11,10 @@ package xyz.sweetkebab.discordproject;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
+        System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF] [%4$-7s] %5$s %n");
+
         BilBerry bb = new BilBerry();
+        bb.info("Starting..");
         bb.load();
     }
 }

@@ -1,9 +1,13 @@
 package xyz.sweetkebab.discordproject;
 
+import redis.clients.jedis.Jedis;
+import xyz.sweetkebab.discordproject.database.RedisManager;
+import xyz.sweetkebab.discordproject.entities.GuildWrapper;
 import xyz.sweetkebab.discordproject.managers.FileManager;
 import xyz.sweetkebab.discordproject.managers.PluginManager;
 import xyz.sweetkebab.discordproject.plugins.api.DiscordAPI;
 
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 /**
@@ -20,12 +24,19 @@ public class BilBerry {
     private FileManager fileManager;
     private PluginManager pluginManager;
     private DiscordBot discordBot;
-    private Logger logger;
+    private Logger logger = Logger.getLogger("BilBerry");
     private DiscordAPI api;
+    private Jedis jedis;
+
+    public static HashMap<String, GuildWrapper> guilds = new HashMap<>();
 
     public void load() throws Exception {
+
+        RedisManager redis = new RedisManager("localhost",6379);
+        redis.connect();
+        this.jedis = redis.getRedisDatabase().getJedisPool().getResource();
+
         instance = this;
-        logger = Logger.getLogger("BilBerry");
         this.discordBot = new DiscordBot(this);
         this.fileManager = new FileManager();
 
@@ -45,6 +56,10 @@ public class BilBerry {
         return fileManager;
     }
 
+    public PluginManager getPluginManager() {
+        return this.pluginManager;
+    }
+
     public void info(String message) {
         getLogger().info(message);
     }
@@ -60,4 +75,13 @@ public class BilBerry {
     public DiscordAPI getAPI() {
         return this.api;
     }
+
+    public Jedis getJedis() {
+        return this.jedis;
+    }
+
+    public HashMap<String, GuildWrapper> getGuilds() {
+        return guilds;
+    }
+
 }

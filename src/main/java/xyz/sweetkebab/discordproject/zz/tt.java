@@ -18,7 +18,7 @@ public class tt extends DiscordPlugin {
 
     public void onLoad()  {
         getApi().registerCommand(new ReloadCommand());
-        getApi().registerListener(new JoinListener());
+//        getApi().registerListener(new JoinListener());
     }
 
     public void onUnload() {

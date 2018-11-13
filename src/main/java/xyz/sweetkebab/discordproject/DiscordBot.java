@@ -1,17 +1,19 @@
 package xyz.sweetkebab.discordproject;
 
+import net.dv8tion.jda.core.entities.Guild;
+import xyz.sweetkebab.discordproject.entities.GuildWrapper;
 import xyz.sweetkebab.discordproject.plugins.PluginLoadException;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.util.Assert;
 import org.yaml.snakeyaml.Yaml;
+import xyz.sweetkebab.discordproject.utils.Assert;
 
 import javax.security.auth.login.LoginException;
 import java.io.*;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -27,10 +29,12 @@ public class DiscordBot {
     private BilBerry instance;
     private JDA jda;
 
-    public DiscordBot(BilBerry instance) {
+
+    DiscordBot(BilBerry instance) {
         this.instance = instance;
     }
-    public void start() throws LoginException, InterruptedException, FileNotFoundException {
+
+    void start() throws LoginException, InterruptedException, FileNotFoundException {
         File file = new File("discord/configs/discordbot.yml");
         InputStream inputStream = new FileInputStream(file);
         Map<String, Object> properties = new Yaml().load(inputStream);
@@ -47,7 +51,20 @@ public class DiscordBot {
                 .setAutoReconnect(true)
                 .setMaxReconnectDelay(300)
                 .setEnableShutdownHook(true)
+                .addEventListener(new BotEventListener())
                 .buildBlocking();
+
+        instance.info("Bot started");
+
+        jda.getSelfUser().getManager().setName(config.getName()).queue();
+
+        loadGuilds();
+    }
+
+    private void loadGuilds() {
+        for(Guild guild : jda.getGuilds()) {
+            BilBerry.guilds.put(guild.getId(), new GuildWrapper(jda, guild));
+        }
     }
 
     private Config construct(Map<String, Object> properties) throws PluginLoadException {
@@ -83,8 +100,12 @@ public class DiscordBot {
             this.name = name;
         }
 
-        public String getToken() {
+        String getToken() {
             return token;
+        }
+
+        String getName() {
+            return name;
         }
     }
 }

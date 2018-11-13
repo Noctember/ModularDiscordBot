@@ -7,5 +7,13 @@ package xyz.sweetkebab.discordproject.user;
  * Created the 2018-11-06 at 21:28.
  */
 public enum PermissionsAccess {
-    USER, MODERATOR, ADMIN, BOT_MODERATOR, BOT_ADMINISTRATOR
+    USER(0), MODERATOR(5), DEVELOPPER(10), BOT_ADMINISTRATOR(20);
+
+    private int id;
+
+    PermissionsAccess(int id) {
+        this.id = id;
+    }
+
+    public int getID() {return id;}
 }

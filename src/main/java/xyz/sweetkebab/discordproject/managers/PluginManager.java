@@ -1,14 +1,12 @@
 package xyz.sweetkebab.discordproject.managers;
 
-import xyz.sweetkebab.discordproject.Assert;
+import xyz.sweetkebab.discordproject.utils.Assert;
 import xyz.sweetkebab.discordproject.BilBerry;
 import xyz.sweetkebab.discordproject.plugins.DiscordPlugin;
 import xyz.sweetkebab.discordproject.plugins.PluginClassLoader;
 import xyz.sweetkebab.discordproject.plugins.PluginDescription;
 import xyz.sweetkebab.discordproject.plugins.PluginLoadException;
 import org.yaml.snakeyaml.Yaml;
-import xyz.sweetkebab.discordproject.plugins.api.DiscordAPI;
-import xyz.sweetkebab.discordproject.plugins.api.DiscordException;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +32,7 @@ public class PluginManager {
     private LinkedHashMap<PluginDescription, DiscordPlugin> plugins;
 
     public void loadPlugins() {
+        BilBerry.getInstance().info("Loading plugins");
         Collection<PluginDescription> pluginDescriptions = new HashSet<>();
         for(File file : BilBerry.getInstance().getFileManager().getPluginsDirectory().listFiles()) {
             if(file.isDirectory()) continue;
@@ -71,14 +70,8 @@ public class PluginManager {
                     throw new PluginLoadException("Main class doesn't extend DiscordPlugin");
                 DiscordPlugin mainInstance = (DiscordPlugin) main.getDeclaredConstructor().newInstance();
                 try {
-                    System.out.println(Arrays.asList(mainInstance.getClass().getFields()));
-//                    Field declaredField = mainInstance.getClass().getField("api");
-//                    declaredField.setAccessible(true);
                     setField(mainInstance, "api", BilBerry.getInstance().getAPI());
 
-//                    declaredField.set(
-//                            mainInstance.api,
-//                            BilBerry.getInstance().getAPI());
                     mainInstance.onLoad();
                     BilBerry.getInstance().info("Loaded plugin " + plugin.getName() + " version " + plugin.getVersion() + " by " + plugin.getAuthor() + ".");
 
@@ -165,5 +158,12 @@ public class PluginManager {
         } catch (IllegalAccessException e) {
             return false;
         }
+    }
+
+    public void unloadPlugins() {
+        plugins.forEach(((pluginDescription, discordPlugin) -> {
+            discordPlugin.onUnload();
+            BilBerry.getInstance().info("Unloaded " + pluginDescription.getName());
+        }));
     }
 }
