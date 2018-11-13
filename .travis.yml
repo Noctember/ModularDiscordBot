@@ -1,0 +1,4 @@
+language: java
+sudo: enable
+before_install:
+ - chmod +x gradlew
