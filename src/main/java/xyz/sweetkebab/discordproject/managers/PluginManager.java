@@ -1,5 +1,7 @@
 package xyz.sweetkebab.discordproject.managers;
 
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.TextChannel;
 import xyz.sweetkebab.discordproject.utils.Assert;
 import xyz.sweetkebab.discordproject.BilBerry;
 import xyz.sweetkebab.discordproject.plugins.DiscordPlugin;
@@ -30,6 +32,7 @@ import java.util.jar.JarFile;
 public class PluginManager {
 
     private LinkedHashMap<PluginDescription, DiscordPlugin> plugins;
+    private Message msg;
 
     public void loadPlugins() {
         BilBerry.getInstance().info("Loading plugins");
@@ -46,6 +49,11 @@ public class PluginManager {
         }
 
         loadPlugins(pluginDescriptions);
+    }
+
+    public void loadPlugins(Message msg) {
+        this.msg = msg;
+        loadPlugins();
     }
 
     private void loadPlugins(Collection<PluginDescription> pluginDescriptions) {
@@ -83,6 +91,10 @@ public class PluginManager {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+
+        if(msg != null) {
+            msg.editMessage("~~Done~~").queue();
         }
     }
 
@@ -165,5 +177,13 @@ public class PluginManager {
             discordPlugin.onUnload();
             BilBerry.getInstance().info("Unloaded " + pluginDescription.getName());
         }));
+    }
+
+    public void unloadPlugins(Message msg) {
+        plugins.forEach(((pluginDescription, discordPlugin) -> {
+            discordPlugin.onUnload();
+            BilBerry.getInstance().info("Unloaded " + pluginDescription.getName());
+        }));
+        msg.editMessage("~~Done~~").queue();
     }
 }

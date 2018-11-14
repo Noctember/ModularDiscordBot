@@ -10,5 +10,5 @@ package xyz.sweetkebab.discordproject.plugins.api.command.meta;
  * Created the 2018-10-27 at 18:57.
  */
 public enum CommandCategory {
-    UNKNOWN, BOTMANAGEMENT;
+    UNKNOWN, MISC, MUSIC, MODERATION, BOTMANAGEMENT;
 }

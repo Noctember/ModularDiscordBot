@@ -6,6 +6,8 @@ import xyz.sweetkebab.discordproject.entities.GuildWrapper;
 import xyz.sweetkebab.discordproject.managers.FileManager;
 import xyz.sweetkebab.discordproject.managers.PluginManager;
 import xyz.sweetkebab.discordproject.plugins.api.DiscordAPI;
+import xyz.sweetkebab.discordproject.plugins.api.command.ReloadCommand;
+import xyz.sweetkebab.discordproject.plugins.api.command.ShutdownCommand;
 
 import java.util.HashMap;
 import java.util.logging.Logger;
@@ -46,6 +48,14 @@ public class BilBerry {
         this.pluginManager = new PluginManager();
         pluginManager.loadPlugins();
 
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            jedis.close();
+            getBot().getJDA().shutdown();
+            System.out.println("Thanks for using ModularDiscordBot");
+        }));
+
+        api.registerCommand(new ReloadCommand());
+        api.registerCommand(new ShutdownCommand());
     }
 
     public static BilBerry getInstance() {

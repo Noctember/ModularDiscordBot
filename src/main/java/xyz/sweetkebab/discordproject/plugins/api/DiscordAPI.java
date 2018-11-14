@@ -42,7 +42,6 @@ public class DiscordAPI {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
-        System.out.println(Arrays.asList(command.command()).toString()+"\n"+handler.getClass().getName());
         for(String commande : command.command()) {
             commands.put(commande, handler);
             commandInfos.put(commande, command);
